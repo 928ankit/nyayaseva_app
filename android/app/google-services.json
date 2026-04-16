@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458550241353",
+    "project_id": "demo1-e65ad",
+    "storage_bucket": "demo1-e65ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458550241353:android:93c4d4ffbb0bd302f4f798",
+        "android_client_info": {
+          "package_name": "com.example.nyayaseva_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd-nR1kirJUMmZU1A9P9IC-i9OVFROPNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
