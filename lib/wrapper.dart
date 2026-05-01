@@ -12,14 +12,12 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-
           // loading state
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -30,7 +28,8 @@ class _WrapperState extends State<Wrapper> {
             User user = snapshot.data!;
 
             // email verification check
-            if (user.emailVerified || user.providerData.any((p) => p.providerId == 'google.com')) {
+            if (user.emailVerified ||
+                user.providerData.any((p) => p.providerId == 'google.com')) {
               return Homepage();
             } else {
               return Verify();

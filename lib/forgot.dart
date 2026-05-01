@@ -14,17 +14,18 @@ class _ForgotState extends State<Forgot> {
   // Reset Password Function
   reset() async {
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: email.text.trim());
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password reset link sent")),
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email.text.trim(),
       );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Password reset link sent")));
     } catch (e) {
       print("Error: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -37,18 +38,14 @@ class _ForgotState extends State<Forgot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Forgot Password"),
-      ),
+      appBar: AppBar(title: const Text("Forgot Password")),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextField(
               controller: email,
-              decoration: const InputDecoration(
-                hintText: "Enter email",
-              ),
+              decoration: const InputDecoration(hintText: "Enter email"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

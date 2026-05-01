@@ -10,13 +10,12 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   final user = FirebaseAuth.instance.currentUser;
 
-  // 🔥 LOGOUT FUNCTION (IMPORTANT)
+  // LOGOUT FUNCTION (IMPORTANT)
   Future<void> signout() async {
-    await GoogleSignIn().signOut();   // 👈 Google logout
-    await FirebaseAuth.instance.signOut(); // 👈 Firebase logout
+    await GoogleSignIn().signOut(); // Google logout
+    await FirebaseAuth.instance.signOut(); // Firebase logout
   }
 
   @override
@@ -24,19 +23,11 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Homepage"),
-        actions: [
-          IconButton(
-            onPressed: signout,
-            icon: Icon(Icons.logout),
-          )
-        ],
+        actions: [IconButton(onPressed: signout, icon: Icon(Icons.logout))],
       ),
 
       body: Center(
-        child: Text(
-          user?.email ?? "No Email",
-          style: TextStyle(fontSize: 18),
-        ),
+        child: Text(user?.email ?? "No Email", style: TextStyle(fontSize: 18)),
       ),
 
       floatingActionButton: FloatingActionButton(

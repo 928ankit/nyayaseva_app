@@ -11,39 +11,38 @@ class Verify extends StatefulWidget {
 }
 
 class _VerifyState extends State<Verify> {
-
   @override
   void initState() {
     sendverifylink();
     super.initState();
   }
 
-  // 🔗 Send Verification Link
+  // Send Verification Link
   sendverifylink() async {
     final user = FirebaseAuth.instance.currentUser;
-    await user!.sendEmailVerification().then((value) => {
-      Get.snackbar(
+    await user!.sendEmailVerification().then(
+      (value) => {
+        Get.snackbar(
           'Link sent',
           'A link has been send to your email',
           margin: EdgeInsets.all(30),
-          snackPosition: SnackPosition.BOTTOM
-      )
-    });
+          snackPosition: SnackPosition.BOTTOM,
+        ),
+      },
+    );
   }
 
-  // 🔄 Reload Page
+  // Reload Page
   reload() async {
-    await FirebaseAuth.instance.currentUser!
-        .reload()
-        .then((value) => Get.offAll(Wrapper()));
+    await FirebaseAuth.instance.currentUser!.reload().then(
+      (value) => Get.offAll(Wrapper()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Verification"),
-      ),
+      appBar: AppBar(title: Text("Verification")),
       body: Padding(
         padding: const EdgeInsets.all(28.0),
         child: Center(
