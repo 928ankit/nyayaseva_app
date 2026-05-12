@@ -334,12 +334,17 @@ class _LoginState extends State<Login> {
                                         fontSize: 14,
                                       ),
                                     ),
-                                    Text(
-                                      "Create an account",
-                                      style: TextStyle(
-                                        color: Color(0xFF00E0FF),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Signup());
+                                      },
+                                      child: const Text(
+                                        "Create an account",
+                                        style: TextStyle(
+                                          color: Color(0xFF00E0FF),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ],
