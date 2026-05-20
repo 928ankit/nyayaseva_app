@@ -1,10 +1,14 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nyayaseva_app/homepage.dart';
-import 'package:nyayaseva_app/login.dart';
-import 'package:nyayaseva_app/verifyemail.dart';
+import 'package:flutter/material.dart';
+
+import 'homepage.dart';
+import 'login.dart';
+import 'splash.dart';
 
 class Wrapper extends StatefulWidget {
+
   const Wrapper({super.key});
 
   @override
@@ -12,34 +16,48 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
+
+  bool showSplash = true;
+
+  @override
+  void initState() {
+
+    super.initState();
+
+    Timer(const Duration(seconds: 3), () {
+
+      if (mounted) {
+
+        setState(() {
+
+          showSplash = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          // loading state
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
 
-          // user logged in
-          if (snapshot.hasData) {
-            User user = snapshot.data!;
+    // SHOW CUSTOM SPLASH
+    if (showSplash) {
 
-            // email verification check
-            if (user.emailVerified ||
-                user.providerData.any((p) => p.providerId == 'google.com')) {
-              return Homepage();
-            } else {
-              return Verify();
-            }
-          }
+      return const SplashScreen();
+    }
 
-          // not logged in
-          return Login();
-        },
-      ),
+    return StreamBuilder<User?>(
+
+      stream: FirebaseAuth.instance.authStateChanges(),
+
+      builder: (context, snapshot) {
+
+        if (snapshot.hasData) {
+
+          return const Homepage();
+        }
+
+        return const Login();
+      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'wrapper.dart';
+// import 'wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,20 +21,14 @@ class _SplashScreenState extends State<SplashScreen>
     rippleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
-    )..repeat();
+    )
+      ..repeat();
 
     glowController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
-    )..repeat(reverse: true);
-
-    // Redirect after 3 sec
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const Wrapper()),
-      );
-    });
+    )
+      ..repeat(reverse: true);
   }
 
   @override
@@ -59,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 🌊 Ripple + Glow Mic
+            //  Ripple + Glow Mic
             Stack(
               alignment: Alignment.center,
               children: [
@@ -98,10 +92,9 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.mic,
-                        size: 60,
-                        color: Colors.cyan,
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                        height: 90,
                       ),
                     );
                   },
@@ -144,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
 
             const SizedBox(height: 40),
 
-            // 🔥 Gradient Button
+            //  Gradient Button
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
               decoration: BoxDecoration(

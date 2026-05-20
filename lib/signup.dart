@@ -17,10 +17,22 @@ class _SignupState extends State<Signup> {
   // Signup Function
   signup() async {
     try {
+      UserCredential userCredential =
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(),
         password: password.text.trim(),
       );
+
+// SEND EMAIL VERIFICATION
+      await userCredential.user!.sendEmailVerification();
+
+      Get.snackbar(
+        "Verification Email Sent",
+        "Please verify your email before login",
+      );
+
+// LOGOUT AFTER SIGNUP
+      await FirebaseAuth.instance.signOut();
 
       Get.offAll(() => Wrapper());
     } catch (e) {

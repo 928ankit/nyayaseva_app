@@ -1,7 +1,9 @@
+// import 'auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:nyayaseva_app/homepage.dart';
 import 'signup.dart';
 import 'forgot.dart';
 
@@ -46,6 +48,28 @@ class _LoginState extends State<Login> {
         email: email.text.trim(),
         password: password.text.trim(),
       );
+
+      User? user = FirebaseAuth.instance.currentUser;
+
+// REFRESH USER
+      await user?.reload();
+
+      user = FirebaseAuth.instance.currentUser;
+
+// CHECK EMAIL VERIFIED
+      if (user != null && user.emailVerified) {
+
+        // Get.offAll(() => Homepage());
+
+      } else {
+
+        await FirebaseAuth.instance.signOut();
+
+        Get.snackbar(
+          "Email Not Verified",
+          "Please verify your email first",
+        );
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         wrongPassword = true;
@@ -57,31 +81,51 @@ class _LoginState extends State<Login> {
   }
 
   // GOOGLE LOGIN
-  Future<UserCredential?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  // GOOGLE LOGIN
+  Future<void> signInWithGoogle() async {
 
-      if (googleUser == null) return null;
+    try {
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? googleUser =
+      await googleSignIn.signIn();
+
+      if (googleUser == null) return;
 
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+
     } catch (e) {
-      Get.snackbar("Error", e.toString());
-      return null;
+
+      Get.snackbar(
+        "Error",
+        e.toString(),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+        body: SizedBox(
+
+          height: MediaQuery.of(context).size.height,
+
+          width: double.infinity,
+
+          child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -102,15 +146,38 @@ class _LoginState extends State<Login> {
               : SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Column(
+                    child: ConstrainedBox(
+
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height - 40,
+                      ),
+
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 10),
+
 
                         // Logo
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.tealAccent.withOpacity(0.2),
-                          child: const Icon(Icons.gavel, color: Colors.white),
+                        Container(
+                          padding: const EdgeInsets.all(18),
+
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.cyan.withOpacity(0.5),
+                                blurRadius: 25,
+                                spreadRadius: 5,
+                              ),
+                            ],
+                          ),
+
+
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            height: 70,
+                          ),
                         ),
 
                         const SizedBox(height: 10),
@@ -173,42 +240,57 @@ class _LoginState extends State<Login> {
 
                               // GOOGLE BUTTON
                               GestureDetector(
-                                onTap: () async {
-                                  setState(() => isloading = true);
-                                  var user = await signInWithGoogle();
-                                  setState(() => isloading = false);
 
-                                  if (user != null) {
-                                    Get.snackbar(
-                                      "Success",
-                                      "Google Login Success",
-                                    );
+                                onTap: () async {
+
+                                  setState(() => isloading = true);
+
+                                  await signInWithGoogle();
+
+                                  if (mounted) {
+
+                                    setState(() => isloading = false);
                                   }
                                 },
+
                                 child: Container(
+
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
                                   ),
+
                                   decoration: BoxDecoration(
+
                                     color: Colors.white,
+
                                     borderRadius: BorderRadius.circular(30),
+
                                     boxShadow: const [
+
                                       BoxShadow(
                                         color: Colors.black12,
                                         blurRadius: 10,
                                       ),
                                     ],
                                   ),
+
                                   child: Row(
+
                                     mainAxisAlignment: MainAxisAlignment.center,
+
                                     children: [
+
                                       Image.asset(
                                         "assets/images/google.png",
                                         height: 22,
                                       ),
+
                                       const SizedBox(width: 10),
+
                                       const Text(
+
                                         "Sign in with Google",
+
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
@@ -355,10 +437,12 @@ class _LoginState extends State<Login> {
                         ),
                       ],
                     ),
+                    ),
                   ),
                 ),
         ),
       ),
+        ),
     );
   }
 }
